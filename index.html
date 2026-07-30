@@ -1,0 +1,438 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>WNL Reception — AI Receptionist for Med Spas & Home Services</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+:root{--bg:#030303;--surface:#0a0a0b;--card:#121214;--card-hover:#18181b;--border:rgba(255,255,255,0.06);--border-hover:rgba(255,255,255,0.1);--text:#fff;--text-secondary:rgba(255,255,255,0.6);--text-muted:rgba(255,255,255,0.35);--accent:#6366f1;--accent-hover:#818cf8;--accent-glow:rgba(99,102,241,0.25);--green:#10b981;--red:#ef4444;--radius:12px}
+html{scroll-behavior:smooth}
+body{font-family:'Inter',-apple-system,sans-serif;background:var(--bg);color:var(--text);line-height:1.6;-webkit-font-smoothing:antialiased}
+
+.container{max-width:1120px;margin:0 auto;padding:0 24px}
+
+/* Nav */
+nav{position:fixed;top:0;left:0;right:0;z-index:100;background:rgba(3,3,3,0.85);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border-bottom:1px solid var(--border)}
+nav .container{display:flex;align-items:center;justify-content:space-between;height:64px}
+.logo{font-weight:800;font-size:20px;letter-spacing:-0.5px;display:flex;align-items:center;gap:8px}
+.logo span{background:linear-gradient(135deg,var(--accent),var(--accent-hover));-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.nav-links{display:flex;gap:32px;align-items:center}
+.nav-links a{color:var(--text-secondary);text-decoration:none;font-size:14px;font-weight:500;transition:color .2s}
+.nav-links a:hover{color:var(--text)}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:6px;padding:10px 20px;border-radius:8px;font-size:14px;font-weight:600;text-decoration:none;transition:all .2s;cursor:pointer;border:none}
+.btn-primary{background:linear-gradient(135deg,var(--accent),#4f46e5);color:#fff;box-shadow:0 4px 20px var(--accent-glow)}
+.btn-primary:hover{transform:translateY(-1px);box-shadow:0 8px 30px var(--accent-glow)}
+.btn-outline{border:1px solid var(--border-hover);color:var(--text)}
+.btn-outline:hover{background:var(--card);border-color:var(--accent);color:var(--accent)}
+.btn-large{padding:14px 32px;font-size:16px;border-radius:10px}
+
+/* Hero */
+.hero{padding:140px 0 80px;min-height:100vh;display:flex;align-items:center;position:relative;overflow:hidden}
+.hero::before{content:'';position:absolute;top:-50%;left:-50%;width:200%;height:200%;background:radial-gradient(ellipse at 30% 50%,var(--accent-glow) 0%,transparent 60%);pointer-events:none}
+.hero-content{position:relative;z-index:1}
+.badge{display:inline-flex;align-items:center;gap:8px;padding:6px 14px;border-radius:100px;background:rgba(99,102,241,0.1);border:1px solid rgba(99,102,241,0.2);font-size:13px;font-weight:500;color:var(--accent-hover);margin-bottom:24px}
+.hero h1{font-size:64px;font-weight:800;line-height:1.05;letter-spacing:-2px;margin-bottom:20px;max-width:800px}
+.hero h1 .gradient{background:linear-gradient(135deg,#fff 40%,var(--accent-hover));-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.hero p{font-size:18px;color:var(--text-secondary);max-width:560px;margin-bottom:40px;line-height:1.7}
+.hero-buttons{display:flex;gap:12px;flex-wrap:wrap}
+.stats{display:flex;gap:48px;margin-top:60px;padding-top:40px;border-top:1px solid var(--border)}
+.stat-value{font-size:28px;font-weight:700;letter-spacing:-0.5px;margin-bottom:4px}
+.stat-label{font-size:13px;color:var(--text-muted);font-weight:500;text-transform:uppercase;letter-spacing:0.5px}
+.stat-value .highlight{color:var(--green)}
+
+/* Sections */
+.section{padding:100px 0}
+.section-label{font-size:13px;font-weight:600;text-transform:uppercase;letter-spacing:1px;color:var(--accent-hover);margin-bottom:12px}
+.section-title{font-size:40px;font-weight:700;letter-spacing:-1px;margin-bottom:16px}
+.section-subtitle{font-size:17px;color:var(--text-secondary);max-width:600px;line-height:1.7}
+
+/* Problem */
+.problem-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:40px}
+.problem-card{background:var(--card);border-radius:var(--radius);padding:28px;border:1px solid var(--border);transition:all .2s}
+.problem-card:hover{background:var(--card-hover);border-color:var(--border-hover);transform:translateY(-2px)}
+.problem-card .icon{font-size:28px;margin-bottom:16px}
+.problem-card h3{font-size:17px;font-weight:600;margin-bottom:8px}
+.problem-card p{font-size:14px;color:var(--text-secondary);line-height:1.6}
+.problem-card .stat{display:block;margin-top:12px;font-size:24px;font-weight:700;color:var(--red)}
+.problem-card .stat .label{font-size:12px;color:var(--text-muted);font-weight:500}
+
+/* Demo */
+.demo-grid{display:grid;grid-template-columns:1fr 1fr;gap:40px;align-items:center;margin-top:48px}
+.demo-player{background:var(--card);border-radius:16px;padding:32px;border:1px solid var(--border)}
+.demo-player h3{font-size:15px;font-weight:600;margin-bottom:4px}
+.demo-player p{font-size:13px;color:var(--text-muted);margin-bottom:20px}
+.call-entry{padding:16px 0;border-bottom:1px solid var(--border)}
+.call-entry:last-child{border-bottom:none;padding-bottom:0}
+.call-entry:first-child{padding-top:0}
+.call-label{font-size:12px;font-weight:600;color:var(--accent-hover);text-transform:uppercase;letter-spacing:0.5px;margin-bottom:8px}
+.call-transcript{font-size:13px;color:var(--text-secondary);line-height:1.6;margin-bottom:10px;font-style:italic}
+.demo-audio{display:none}
+audio{width:100%;height:40px;margin-top:8px}
+audio::-webkit-media-controls-panel{background:var(--card)}
+.demo-features{display:flex;flex-direction:column;gap:16px}
+.demo-feature{display:flex;gap:14px;align-items:flex-start;padding:16px 20px;background:var(--card);border-radius:var(--radius);border:1px solid var(--border)}
+.demo-feature .check{width:28px;height:28px;border-radius:50%;background:rgba(16,185,129,0.15);display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:14px;color:var(--green)}
+.demo-feature div{flex:1}
+.demo-feature h4{font-size:14px;font-weight:600;margin-bottom:3px}
+.demo-feature p{font-size:13px;color:var(--text-secondary);line-height:1.5}
+
+/* How it works */
+.steps{display:grid;grid-template-columns:repeat(3,1fr);gap:24px;margin-top:48px}
+.step{text-align:center;padding:32px 24px;background:var(--card);border-radius:var(--radius);border:1px solid var(--border);position:relative}
+.step-number{width:48px;height:48px;border-radius:50%;background:linear-gradient(135deg,var(--accent),#4f46e5);display:flex;align-items:center;justify-content:center;font-size:18px;font-weight:700;margin:0 auto 20px}
+.step h3{font-size:17px;font-weight:600;margin-bottom:8px}
+.step p{font-size:14px;color:var(--text-secondary);line-height:1.6}
+
+/* ROI Calculator */
+.calc-wrapper{background:var(--card);border-radius:16px;border:1px solid var(--border);padding:40px;margin-top:40px}
+.calc-grid{display:grid;grid-template-columns:1fr 1fr;gap:32px}
+.calc-inputs{display:flex;flex-direction:column;gap:20px}
+.input-group label{font-size:13px;font-weight:600;color:var(--text-secondary);display:block;margin-bottom:6px}
+.input-group input,.input-group select{width:100%;padding:12px 16px;background:var(--surface);border:1px solid var(--border);border-radius:8px;color:var(--text);font-size:15px;font-family:inherit;transition:border-color .2s}
+.input-group input:focus,.input-group select:focus{outline:none;border-color:var(--accent)}
+.input-group input[type=range]{padding:0;background:transparent;border:none;accent-color:var(--accent)}
+.range-value{font-size:13px;color:var(--accent-hover);font-weight:600}
+.calc-results{padding:28px;background:var(--surface);border-radius:var(--radius);border:1px solid var(--border);display:flex;flex-direction:column;justify-content:center}
+.calc-result-item{display:flex;justify-content:space-between;padding:12px 0;border-bottom:1px solid var(--border);font-size:14px}
+.calc-result-item:last-child{border-bottom:none}
+.calc-result-item .label{color:var(--text-secondary)}
+.calc-result-item .value{font-weight:600}
+.calc-result-item.total{font-size:18px;margin-top:8px;padding-top:16px;border-top:2px solid var(--accent)}
+.calc-result-item.total .value{color:var(--accent-hover);font-size:22px;font-weight:700}
+.calc-result-item.savings .value{color:var(--green)}
+
+/* Pricing */
+.pricing-grid{display:grid;grid-template-columns:1fr 1fr;gap:24px;margin-top:48px}
+.pricing-card{background:var(--card);border-radius:16px;padding:40px;border:1px solid var(--border);position:relative;transition:all .2s}
+.pricing-card:hover{border-color:var(--accent)}
+.pricing-card.featured{border-color:var(--accent);background:linear-gradient(135deg,rgba(99,102,241,0.05),transparent);
+box-shadow:0 0 40px var(--accent-glow)}
+.pricing-card.featured::before{content:'Most Popular';position:absolute;top:-12px;left:50%;transform:translateX(-50%);padding:4px 16px;border-radius:100px;background:linear-gradient(135deg,var(--accent),#4f46e5);font-size:12px;font-weight:600;color:#fff}
+.pricing-name{font-size:15px;font-weight:600;margin-bottom:4px}
+.pricing-desc{font-size:13px;color:var(--text-muted);margin-bottom:24px}
+.pricing-price{font-size:48px;font-weight:800;letter-spacing:-2px}
+.pricing-price span{font-size:16px;font-weight:500;color:var(--text-muted);letter-spacing:0}
+.pricing-features{list-style:none;margin:24px 0;display:flex;flex-direction:column;gap:10px}
+.pricing-features li{font-size:14px;color:var(--text-secondary);display:flex;align-items:center;gap:10px}
+.pricing-features li::before{content:'✓';color:var(--green);font-weight:700;font-size:14px}
+
+/* Footer */
+footer{padding:40px 0;border-top:1px solid var(--border);text-align:center;font-size:13px;color:var(--text-muted)}
+
+/* Responsive */
+@media(max-width:768px){
+  .hero h1{font-size:40px}
+  .problem-grid,.demo-grid,.calc-grid{grid-template-columns:1fr}
+  .steps{grid-template-columns:1fr}
+  .stats{flex-wrap:wrap;gap:24px}
+  .pricing-grid{grid-template-columns:1fr}
+  .nav-links{display:none}
+  .section-title{font-size:30px}
+}
+</style>
+</head>
+<body>
+
+<nav>
+<div class="container">
+  <div class="logo">◈ <span>WNL</span> Reception</div>
+  <div class="nav-links">
+    <a href="#problem">Problem</a>
+    <a href="#demo">Demo</a>
+    <a href="#roi">ROI</a>
+    <a href="#pricing">Pricing</a>
+    <a href="#contact" class="btn btn-primary">Book a Demo</a>
+  </div>
+</div>
+</nav>
+
+<section class="hero" id="home">
+<div class="container hero-content">
+  <div class="badge">● Used by premium med spas & home service pros</div>
+  <h1>Turn <span class="gradient">Missed Calls</span> Into Booked Appointments</h1>
+  <p>AI receptionist that answers 100% of calls 24/7. Sounds human. Books appointments. Never puts a caller on hold.</p>
+  <div class="hero-buttons">
+    <a href="#demo" class="btn btn-primary btn-large">▶ Hear the Demo</a>
+    <a href="#roi" class="btn btn-outline btn-large">Calculate Your ROI</a>
+  </div>
+  <div class="stats">
+    <div><div class="stat-value">$<span class="highlight">1,200</span></div><div class="stat-label">Lost Per Missed Call</div></div>
+    <div><div class="stat-value"><span class="highlight">391</span>%</div><div class="stat-label">Higher Conversion Under 1 Min</div></div>
+    <div><div class="stat-value"><span class="highlight">78</span>%</div><div class="stat-label">Buy From First Responder</div></div>
+  </div>
+</div>
+</section>
+
+<section class="section" id="problem">
+<div class="container">
+  <div class="section-label">The Problem</div>
+  <h2 class="section-title">Every Missed Call Costs You a Client</h2>
+  <p class="section-subtitle">Med spas and home service businesses miss 27-50% of inbound calls. Here's what that actually costs.</p>
+  <div class="problem-grid">
+    <div class="problem-card">
+      <div class="icon">📞</div>
+      <h3>Missed Call Rate</h3>
+      <p>When your front desk is busy with a client, every incoming call goes to voicemail. 85% of callers won't leave a message.</p>
+      <span class="stat">62% <span class="label">industry miss rate</span></span>
+    </div>
+    <div class="problem-card">
+      <div class="icon">⏱️</div>
+      <h3>Speed to Lead</h3>
+      <p>Responding within 1 minute gives 391% higher conversion. Most businesses take 8-26 hours. Average: 47 hours.</p>
+      <span class="stat">391% <span class="label">conversion lift under 1 min</span></span>
+    </div>
+    <div class="problem-card">
+      <div class="icon">💰</div>
+      <h3>Revenue Leakage</h3>
+      <p>A single missed appointment costs $500-$2,000 in lost revenue. Annualized: $42K-$250K per business.</p>
+      <span class="stat">$126K <span class="label">avg annual loss per shop</span></span>
+    </div>
+    <div class="problem-card">
+      <div class="icon">🏆</div>
+      <h3>First Responder Wins</h3>
+      <p>78% of customers buy from the company that calls back first. If you're slow, your competitor takes the deal.</p>
+      <span class="stat">78% <span class="label">win rate for first responder</span></span>
+    </div>
+  </div>
+</div>
+</section>
+
+<section class="section" id="demo" style="background:var(--surface)">
+<div class="container">
+  <div class="section-label">Hear It In Action</div>
+  <h2 class="section-title">Sounds Exactly Like a Human Receptionist</h2>
+  <p class="section-subtitle">Built on ElevenLabs — the most advanced voice AI. Customers can't tell the difference.</p>
+  <div class="demo-grid">
+    <div class="demo-player">
+      <h3>Sample Calls</h3>
+      <p>Listen to how the AI handles real inquiries</p>
+      <div class="call-entry">
+        <div class="call-label">Call 1 — Greeting & Intake</div>
+        <div class="call-transcript">"Thank you for calling Beverly Hills Med Spa. This is Sarah, your AI receptionist. How can I help you today?"</div>
+        <audio controls>
+          <source src="./demo_audio/demo_call.wav" type="audio/wav">
+        </audio>
+      </div>
+      <div class="call-entry">
+        <div class="call-label">Call 2 — Booking & Upsell</div>
+        <div class="call-transcript">"I see you're interested in our IV therapy packages. We have a special promotion this month — 20% off our hydration and vitamin boost package."</div>
+        <audio controls>
+          <source src="./demo_audio/demo_scenario2.wav" type="audio/wav">
+        </audio>
+      </div>
+      <div class="call-entry">
+        <div class="call-label">Call 3 — Confirmation</div>
+        <div class="call-transcript">"Perfect, I've scheduled your appointment for Thursday at 2 PM with Dr. Patel. You'll receive a confirmation text shortly."</div>
+        <audio controls>
+          <source src="./demo_audio/demo_scenario3.wav" type="audio/wav">
+        </audio>
+      </div>
+    </div>
+    <div>
+      <div class="demo-features">
+        <div class="demo-feature">
+          <div class="check">✓</div>
+          <div>
+            <h4>24/7 Availability</h4>
+            <p>Answers every call instantly — weekends, holidays, 2 AM. No voicemail, no missed opportunities.</p>
+          </div>
+        </div>
+        <div class="demo-feature">
+          <div class="check">✓</div>
+          <div>
+            <h4>Natural Conversations</h4>
+            <p>Powered by ElevenLabs Flash v2.5. Human-level intonation, pacing, and empathy. No robot voice.</p>
+          </div>
+        </div>
+        <div class="demo-feature">
+          <div class="check">✓</div>
+          <div>
+            <h4>Books Appointments Automatically</h4>
+            <p>Integrates with your calendar. Checks availability, books slots, sends confirmations. Zero manual work.</p>
+          </div>
+        </div>
+        <div class="demo-feature">
+          <div class="check">✓</div>
+          <div>
+            <h4>Qualifies & Routes Leads</h4>
+            <p>Asks screening questions, captures caller info, and routes hot leads straight to your phone or CRM.</p>
+          </div>
+        </div>
+        <div class="demo-feature">
+          <div class="check">✓</div>
+          <div>
+            <h4>Customizable Script</h4>
+            <p>We train the AI on your services, pricing, hours, and FAQ. It sounds like it works for you.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+</section>
+
+<section class="section" id="how">
+<div class="container">
+  <div class="section-label">How It Works</div>
+  <h2 class="section-title">Setup in 48 Hours. Go Live in 3 Days.</h2>
+  <p class="section-subtitle">No hardware. No installation. No training your team.</p>
+  <div class="steps">
+    <div class="step">
+      <div class="step-number">1</div>
+      <h3>Forward Your Calls</h3>
+      <p>We give you a forwarding number or SIP trunk — one setting change and calls start routing to our AI. Takes 10 minutes.</p>
+    </div>
+    <div class="step">
+      <div class="step-number">2</div>
+      <h3>We Train the AI</h3>
+      <p>We build your custom script: services, pricing, hours, booking rules, FAQs. You review and approve in a call.</p>
+    </div>
+    <div class="step">
+      <div class="step-number">3</div>
+      <h3>Go Live</h3>
+      <p>Zero training for your staff. The AI handles every call. You get a dashboard with recordings, transcripts, and booked appointments.</p>
+    </div>
+  </div>
+</div>
+</section>
+
+<section class="section" id="roi" style="background:var(--surface)">
+<div class="container">
+  <div class="section-label">ROI Calculator</div>
+  <h2 class="section-title">What Are Missed Calls Costing You?</h2>
+  <p class="section-subtitle">Enter your numbers to see the hard cost of unanswered calls — and what you'd save with WNL Reception.</p>
+  <div class="calc-wrapper">
+    <div class="calc-grid">
+      <div class="calc-inputs">
+        <div class="input-group">
+          <label>Business type</label>
+          <select id="bizType" onchange="calcROI()">
+            <option value="medspa">Med Spa / Aesthetics</option>
+            <option value="hvac">HVAC Contractor</option>
+            <option value="plumbing">Plumber</option>
+            <option value="roofing">Roofer</option>
+            <option value="dental">Dental Clinic</option>
+            <option value="law">Personal Injury Law</option>
+          </select>
+        </div>
+        <div class="input-group">
+          <label>Weekly inbound calls: <span id="callCount" class="range-value">40</span></label>
+          <input type="range" id="weeklyCalls" min="10" max="150" value="40" oninput="document.getElementById('callCount').textContent=this.value;calcROI()">
+        </div>
+        <div class="input-group">
+          <label>Your average ticket / case value ($)</label>
+          <input type="number" id="ticketValue" value="500" oninput="calcROI()">
+        </div>
+        <div class="input-group">
+          <label>Your close rate on answered calls (%): <span id="closeRateVal" class="range-value">30</span></label>
+          <input type="range" id="closeRate" min="5" max="80" value="30" oninput="document.getElementById('closeRateVal').textContent=this.value;calcROI()">
+        </div>
+      </div>
+      <div class="calc-results" id="calcResults">
+        <div class="calc-result-item"><span class="label">Weekly missed calls</span><span class="value" id="resultMissed">22</span></div>
+        <div class="calc-result-item"><span class="label">Lost jobs per week</span><span class="value" id="resultLostJobs">6.6</span></div>
+        <div class="calc-result-item"><span class="label">Weekly lost revenue</span><span class="value" id="resultWeeklyLoss">$3,300</span></div>
+        <div class="calc-result-item"><span class="label">Monthly lost revenue</span><span class="value" id="resultMonthlyLoss">$14,300</span></div>
+        <div class="calc-result-item total"><span class="label">Annual lost revenue</span><span class="value" id="resultAnnualLoss">$171,600</span></div>
+        <div class="calc-result-item savings"><span class="label">WNL Reception cost</span><span class="value">$750/mo</span></div>
+        <div class="calc-result-item savings"><span class="label">Your savings per year</span><span class="value" id="resultSavings">$162,600</span></div>
+      </div>
+    </div>
+  </div>
+</div>
+</section>
+
+<section class="section" id="pricing">
+<div class="container">
+  <div class="section-label">Simple Pricing</div>
+  <h2 class="section-title">One Price. Everything Included.</h2>
+  <p class="section-subtitle">No per-minute fees. No hidden costs. No long-term contracts.</p>
+  <div class="pricing-grid">
+    <div class="pricing-card">
+      <div class="pricing-name">Starter</div>
+      <div class="pricing-desc">For small practices testing AI reception</div>
+      <div class="pricing-price">$750 <span>/ month</span></div>
+      <ul class="pricing-features">
+        <li>Custom AI receptionist voice</li>
+        <li>Custom script & FAQ training</li>
+        <li>Calendar integration</li>
+        <li>Call recordings & transcripts</li>
+        <li>Up to 500 calls/month</li>
+        <li>Email support</li>
+      </ul>
+      <a href="#" class="btn btn-primary" style="width:100%">Start Free Trial</a>
+    </div>
+    <div class="pricing-card featured">
+      <div class="pricing-name">Growth</div>
+      <div class="pricing-desc">For established businesses scaling their intake</div>
+      <div class="pricing-price">$1,500 <span>/ month</span></div>
+      <ul class="pricing-features">
+        <li>Everything in Starter</li>
+        <li>Unlimited calls</li>
+        <li>SMS follow-up automation</li>
+        <li>CRM integration (HubSpot, etc.)</li>
+        <li>Multi-location support</li>
+        <li>Priority phone & Slack support</li>
+      </ul>
+      <a href="#" class="btn btn-primary" style="width:100%">Start Free Trial</a>
+    </div>
+  </div>
+</div>
+</section>
+
+<section class="section" id="contact" style="background:var(--surface);text-align:center;padding:80px 0">
+<div class="container">
+  <div class="section-label">Ready to Stop Losing Calls?</div>
+  <h2 class="section-title" style="max-width:600px;margin:0 auto 16px">Get a Free 14-Day Trial. No Credit Card Required.</h2>
+  <p class="section-subtitle" style="margin:0 auto 32px">We'll set up your AI receptionist and show you real captured revenue. Cancel anytime.</p>
+  <a href="mailto:contact@the1wnl.com" class="btn btn-primary btn-large">contact@the1wnl.com</a>
+  <p style="margin-top:16px;font-size:13px;color:var(--text-muted)">Or call: +1 (702) 805-1810 (Skype)</p>
+</div>
+</section>
+
+<footer>
+<div class="container">
+  WNL Reception — The 1 WNL LLC. AI receptionist for med spas & home services.
+</div>
+</footer>
+
+<script>
+function calcROI() {
+  const type = document.getElementById('bizType').value;
+  const calls = parseInt(document.getElementById('weeklyCalls').value);
+  const ticket = parseFloat(document.getElementById('ticketValue').value);
+  const closeRate = parseFloat(document.getElementById('closeRate').value) / 100;
+
+  const defaults = {
+    medspa: {missRate:0.40, ticket:500, closeRate:0.40},
+    hvac: {missRate:0.50, ticket:1200, closeRate:0.30},
+    plumbing: {missRate:0.45, ticket:500, closeRate:0.35},
+    roofing: {missRate:0.50, ticket:8000, closeRate:0.15},
+    dental: {missRate:0.32, ticket:300, closeRate:0.42},
+    law: {missRate:0.35, ticket:45000, closeRate:0.12},
+  };
+
+  const def = defaults[type];
+  const missRate = 0.50;
+
+  const missed = Math.round(calls * missRate);
+  const lostJobs = (missed * closeRate);
+  const weekly = Math.round(lostJobs * ticket);
+  const monthly = weekly * 4.33;
+  const annual = Math.round(monthly * 12);
+  const savings = annual - (750 * 12);
+
+  document.getElementById('resultMissed').textContent = missed;
+  document.getElementById('resultLostJobs').textContent = lostJobs.toFixed(1);
+  document.getElementById('resultWeeklyLoss').textContent = '$' + weekly.toLocaleString();
+  document.getElementById('resultMonthlyLoss').textContent = '$' + Math.round(monthly).toLocaleString();
+  document.getElementById('resultAnnualLoss').textContent = '$' + annual.toLocaleString();
+  document.getElementById('resultSavings').textContent = '$' + savings.toLocaleString();
+}
+calcROI();
+</script>
+</body>
+</html>
